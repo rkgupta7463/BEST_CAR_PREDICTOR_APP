@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block main %}
+
+<div class="container">
+    <p class="text-center text-white" style="font-weight: bold; font-size:x-large;">Some simple of car prediction</p>
+    <div class="row row-col-4 mt-4">
+
+        {% for c in mn %}
+        <div class="col m-2">
+            <div class="card" style="width: 18rem;">
+                <img src="https://stimg.cardekho.com/images/carexteriorimages/930x620/Audi/A6/6426/1571909505425/front-view-118.jpg?tr=w-420" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{c}}</h5>
+                    <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+                    <h5 class="card-title">Prediction ₹: <span>2560</span> </h5>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

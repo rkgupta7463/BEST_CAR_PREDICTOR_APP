@@ -1,0 +1,180 @@
+{% extends "base.html" %} {% block main %}
+<style>
+    .contain {
+        background-color: #dbdbdb;
+        margin: 4%;
+        padding: 0% 0% 2% 0%;
+        border-radius: 15px;
+    }
+    
+    .contain p {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 2%;
+    }
+    
+    .contain label {
+        font-weight: bold;
+        text-align: center;
+        display: block;
+    }
+    
+    .contain select,
+    .contain input,
+    .contain button {
+        width: 92%;
+        display: block;
+        margin: auto;
+    }
+    
+    .contain button {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .headers {
+        text-align: center;
+        font-size: xx-large;
+        background-color: #a19f9f;
+        margin-top: 50px;
+        border-radius: 15px 15px 0px 0px;
+    }
+</style>
+
+<div class="contain">
+    <div class="headers">
+        Welcome to Car Price Predictor
+        <hr>
+    </div>
+    <p>This app predicts the price of a car if you want to sell. Try filling the details below</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="company">Select the company:</label>
+        <select class="selectpicker form-select" aria-label="Default select example" name="company" id="company" onchange="load_car_model(this.id,'car_model')" required>
+                <option selected>select company</option>
+                {% for c in companies %}
+                <option value="{{c}}">{{c}}</option>
+                {% endfor %}
+            </select>
+        <label for="company">Select the model:</label>
+        <select class="selectpicker form-select" aria-label="Default select example" id="car_model" name="car_model" required>
+            <option selected>select car model</option>
+            {% for m in model %}
+            <option value="{{m}}">{{m}}</option>
+            {% endfor %}
+            </select>
+        <label for="company">Select Year of Purchase:</label>
+        <select class="form-select" aria-label="Default select example" name="year_pur" required>
+                <option selected>select year of Purchase</option>
+                {% for y in year %}
+                <option value="{{y}}">{{y}}</option>
+                {% endfor %}
+            </select>
+        <label for="company">Select the Fuel Type:</label>
+        <select class="form-select" aria-label="Default select example" name="fuel" required>
+                <option selected>select fuel type</option>
+                {% for ft in fuel_type %}
+                <option value="{{ft}}">{{ft}}</option>
+                {% endfor %}
+            </select>
+
+        <label for="company">Select the Killomiter driven:</label>
+        <input type="text" placeholder="Enter the kilometres driven" id="killo_driven" name="killo_driven" class="form-control" required>
+        <button type="submit" class="btn btn-primary">Predict Price</button>
+    </form>
+    {% if prediction %}
+
+    <table class="table table-hover" style="margin-left: 4%;">
+        <p class="text-center">Your Car Details</p>
+        <thead>
+            <tr>
+                <th scope="col">Model</th>
+                <th scope="col">Company</th>
+                <th scope="col">Year of Purchase</th>
+                <th scope="col">Fuel Type</th>
+                <th scope="col">Killomiter Driven</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{cm}}</td>
+                <td>{{company}}</td>
+                <td>{{yp}}</td>
+                <td>{{ft}}</td>
+                <td>{{dc}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <div class="predicted">
+        <h3 class="text-center"><span id="prediction">Prediction ₹: {{prediction}}</span></h3>
+    </div>
+    {% endif %}
+</div>
+
+{% comment %}
+<div class="conatiner">
+    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Fill the car details</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="contain">
+                        <div class="headers">
+                            Welcome to Car Price Predictor
+                            <hr>
+                        </div>
+                        <p>This app predicts the price of a car if you want to sell. Try filling the details below
+                        </p>
+
+                        <form action="#" method="post">
+                            {% csrf_token %}
+                            <label for="company">Select the company:</label>
+                            <select class="form-select" aria-label="Default select example">
+                                    <option selected>select company</option>
+                                    {% for c in companies %}
+                                    <option value="c">{{c}}</option>
+                                    {% endfor %}
+                                </select>
+                            <label for="company">Select the model:</label>
+                            <select class="form-select" aria-label="Default select example">
+                                    <option selected>select models</option>
+                                    {% for m in model %}
+                                    <option value="m">{{m}}</option>
+                                    {% endfor %}
+                                </select>
+                            <label for="company">Select Year of Purchase:</label>
+                            <select class="form-select" aria-label="Default select example">
+                                    <option selected>select year of Purchase</option>
+                                    {% for y in year %}
+                                    <option value="y">{{y}}</option>
+                                    {% endfor %}
+                                </select>
+                            <label for="company">Select the Fuel Type:</label>
+                            <select class="form-select" aria-label="Default select example">
+                                    <option selected>select fuel type</option>
+                                    {% for ft in fuel_type %}
+                                    <option value="ft">{{ft}}</option>
+                                    {% endfor %}
+                                </select>
+
+                            <label for="company">Select the Fuel Type:</label>
+                            <input type="text" placeholder="Enter the kilometres driven" class="form-control">
+                            <button type="submit" class="btn btn-primary">Predict Price</button>
+                        </form>
+                        <div class="predicted">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Open first
+            modal</button>
+</div>
+{% endcomment %} {% endblock %}
