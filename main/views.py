@@ -1,10 +1,10 @@
 from django.shortcuts import render, HttpResponse
 import pandas as pd
 import numpy as np
-import joblib
+import pickle as pkl
 
 # Load the model from the file
-car_model = joblib.load('LinearRegressionModel.pkl', 'rb')
+car_model = pkl.load(open('LinearRegressionModelCar_Pred.pkl', 'rb'))
 
 # craete df
 car = pd.read_csv("cleaned car.csv")
